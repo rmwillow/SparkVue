@@ -111,20 +111,20 @@ const thoughtController = {
     },
 
     // POST /api/thoughts/:id/reactions
-    addReaction({ params, body }, res) {
+    addReaction ({ params, body}, res) {
         Thought.findOneAndUpdate(
             { _id: params.thoughtId },
-            { $addToSet: { reactions: body } },
+            { $push: { reactions: body } },
             { new: true, runValidators: true }
         )
         .then(dbThoughtData => {
             if (!dbThoughtData) {
-                res.status(404).json({ message: 'No thought found with this id' });
+                res.status(404).json({ message: 'No thought with this ID!' });
                 return;
             }
-            res.json(dbThoughtData);
+            res.json(dbThoughtData)
         })
-        .catch(err => res.status(500).json(err));
+        .catch(err => res.json(err));
     },
 
     // DELETE /api/thoughts/:id/reactions
